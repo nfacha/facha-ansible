@@ -14,6 +14,12 @@
         name: facha
         state: present
 
+    - name: Ensure user 'facha' exists with bash shell
+      ansible.builtin.user:
+        name: facha
+        shell: /bin/bash
+        state: present
+
     - name: Add SSH key to user 'facha'
       ansible.builtin.authorized_key:
         user: facha
@@ -22,8 +28,8 @@
 
     - name: Ensure 'facha' has sudo privileges
       ansible.builtin.lineinfile:
-          dest: /etc/sudoers
-          state: present
-          regexp: '^facha ALL'
-          line: 'facha ALL=(ALL) NOPASSWD:ALL'
-          validate: 'visudo -cf %s'
+        dest: /etc/sudoers
+        state: present
+        regexp: '^facha ALL'
+        line: 'facha ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
