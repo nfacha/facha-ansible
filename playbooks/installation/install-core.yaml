@@ -49,6 +49,7 @@
         name: facha
         shell: /bin/bash
         state: present
+        home: /home/facha
 
     - name: Add SSH key to user 'facha'
       ansible.builtin.authorized_key:
