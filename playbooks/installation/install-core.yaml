@@ -39,35 +39,37 @@
         key: "{{ lookup('file', '../keys/facha2020.pub') }}"
 
 
-    # - name: Ensure user 'facha' exists
-    #   ansible.builtin.user:
-    #     name: facha
-    #     state: present
+    - name: Ensure user 'facha' exists
+      ansible.builtin.user:
+        name: facha
+        state: present
 
-    # - name: Ensure user 'facha' exists with bash shell
-    #   ansible.builtin.user:
-    #     name: facha
-    #     shell: /bin/bash
-    #     state: present
-    # - name: Add SSH key to user 'facha'
-    #   ansible.builtin.authorized_key:
-    #     user: facha
-    #     state: present
-    #     key: "{{ lookup('file', '../keys/facha.pub') }}"
+    - name: Ensure user 'facha' exists with bash shell
+      ansible.builtin.user:
+        name: facha
+        shell: /bin/bash
+        state: present
+        home: /home/facha
 
-    # - name: Add SSH key facha2020 to user 'facha'
-    #   ansible.builtin.authorized_key:
-    #     user: facha
-    #     state: present
-    #     key: "{{ lookup('file', '../keys/facha2020.pub') }}"
+    - name: Add SSH key to user 'facha'
+      ansible.builtin.authorized_key:
+        user: facha
+        state: present
+        key: "{{ lookup('file', '../keys/facha.pub') }}"
 
-    # - name: Ensure 'facha' has sudo privileges
-    #   ansible.builtin.lineinfile:
-    #     dest: /etc/sudoers
-    #     state: present
-    #     regexp: '^facha ALL'
-    #     line: 'facha ALL=(ALL) NOPASSWD:ALL'
-    #     validate: 'visudo -cf %s'
+    - name: Add SSH key facha2020 to user 'facha'
+      ansible.builtin.authorized_key:
+        user: facha
+        state: present
+        key: "{{ lookup('file', '../keys/facha2020.pub') }}"
+
+    - name: Ensure 'facha' has sudo privileges
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^facha ALL'
+        line: 'facha ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
 
     - name: Ensure SSH PasswordAuthentication is set to no
       ansible.builtin.lineinfile:
