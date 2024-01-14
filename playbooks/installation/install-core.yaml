@@ -1,0 +1,106 @@
+- name: Provision Core
+  hosts: "{{hosts}}"
+  become: yes
+
+  tasks:
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: yes
+
+    - name: Dist-upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: install core packages
+      apt:
+        name:
+          - prometheus-node-exporter
+          - nfs-common
+          - wget
+          - curl
+          - htop
+          - nload
+      update_cache: yes
+    
+    - name: Add Facha SSH Key to Root
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', 'keys/facha.pub') }}"
+
+    - name: Add Facha2020 SSH Key to Root
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', 'keys/facha2020.pub') }}"
+
+
+    - name: Ensure user 'facha' exists
+      ansible.builtin.user:
+        name: facha
+        state: present
+
+    - name: Ensure user 'facha' exists with bash shell
+      ansible.builtin.user:
+        name: facha
+        shell: /bin/bash
+        state: present
+
+    - name: Add SSH key to user 'facha'
+      ansible.builtin.authorized_key:
+        user: facha
+        state: present
+        key: "{{ lookup('file', 'keys/facha.pub') }}"
+
+    - name: Add SSH key facha2020 to user 'facha'
+      ansible.builtin.authorized_key:
+        user: facha
+        state: present
+        key: "{{ lookup('file', 'keys/facha2020.pub') }}"
+
+    - name: Ensure 'facha' has sudo privileges
+      ansible.builtin.lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^facha ALL'
+        line: 'facha ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
+
+    - name: Ensure SSH PasswordAuthentication is set to no
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+
+    - name: Restart sshd to apply changes
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+
+    - name: Ensure the CA certificate is present in the system trust store
+      ansible.builtin.copy:
+        src: "./ca/SSL_CA.pem"
+        dest: "/usr/local/share/ca-certificates/SSL_CA.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: ca_cert_result
+
+    - name: Ensure the FachaCA certificate is present in the system trust store
+      ansible.builtin.copy:
+        src: "./ca/SSL_CA.pem"
+        dest: "/usr/local/share/ca-certificates/FachaCA.crt"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: ca_cert_result
+
+    - name: Update the certificate database
+      ansible.builtin.command:
+        cmd: "update-ca-certificates"
+      when: ca_cert_result.changed
