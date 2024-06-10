@@ -7,7 +7,7 @@
   vars:
     teleport_ssh_labels:
       - k: "access"
-        v: "homelab-vm"
+        v: "{{ access_tag }}"
     teleport_auth_token: "{{ teleport_auth_token }}"
     teleport_proxy_server: "teleport.facha.dev:443"
     teleport_config_template: "../templates/teleport/teleport.yaml.j2"
