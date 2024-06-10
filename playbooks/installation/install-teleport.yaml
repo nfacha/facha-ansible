@@ -10,4 +10,5 @@
         v: "homelab-vm"
     teleport_auth_token: "{{ teleport_auth_token }}"
     teleport_ca_pin: "{{ teleport_ca_pin }}"
-    teleport_auth_server: "{{ teleport_auth_server }}"
+    teleport_auth_server: "49.12.193.92:3025"
+    teleport_proxy_server: "49.12.193.92:3025"
