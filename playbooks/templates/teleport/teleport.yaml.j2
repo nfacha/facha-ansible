@@ -4,7 +4,7 @@ teleport:
   join_params:
     token_name: {{ teleport_auth_token }}
     method: token
-  ca_pin: "{{ teleport_ca_pin }}"
+  #ca_pin: "{{ teleport_ca_pin }}"
 {% if teleport_auth_server|string %}
   #auth_server: {{ teleport_auth_server }}
 {% endif %}
