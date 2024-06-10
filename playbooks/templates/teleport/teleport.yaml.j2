@@ -1,22 +1,19 @@
----
 version: v3
 teleport:
+  data_dir: /var/lib/teleport
   join_params:
     token_name: {{ teleport_auth_token }}
     method: token
-  #ca_pin: "{{ teleport_ca_pin }}"
-{% if teleport_auth_server|string %}
-  #auth_server: {{ teleport_auth_server }}
-{% endif %}
-{% if teleport_proxy_server|string %}
-  proxy_server: {{ teleport_proxy_server }}
-{% endif %}
+  proxy_server: teleport.facha.dev:443
   log:
     output: stderr
     severity: INFO
     format:
       output: text
+  #ca_pin: sha256:fd6a4106f2f644b238f8efd5673ff73b85a270cd95d650a16cb2a62afaf8980e
   diag_addr: ""
+auth_service:
+  enabled: "no"
 ssh_service:
   enabled: "yes"
   labels:
@@ -24,19 +21,11 @@ ssh_service:
     {{ ssh_label.k }}: {{ ssh_label.v }}
 {% endfor %}
   commands:
-    - name: hostname
-      command: [hostname]
-      period: 60m0s
-    - name: uptime
-      command: [uptime, -p]
-      period: 5m0s
-    - name: version
-      command: [teleport, version]
-      period: 60m0s
+  - name: hostname
+    command: [hostname]
+    period: 1m0s
 proxy_service:
   enabled: "no"
   https_keypairs: []
   https_keypairs_reload_interval: 0s
   acme: {}
-auth_service:
-  enabled: "no"
