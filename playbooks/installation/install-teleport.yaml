@@ -1,0 +1,12 @@
+---
+- name: install core packages for virtual machines
+  hosts: "{{ hosts }}"
+  become: yes
+  roles:
+    - mdsketch.teleport
+  vars:
+    teleport_ssh_labels:
+      - access: "homelab-vm"
+    teleport_auth_token: "{{ teleport_auth_token }}"
+    teleport_ca_pin: "{{ teleport_ca_pin }}"
+    teleport_auth_server: "{{ teleport_auth_server }}"
