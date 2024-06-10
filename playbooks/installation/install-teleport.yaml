@@ -6,7 +6,8 @@
     - mdsketch.teleport
   vars:
     teleport_ssh_labels:
-      - access: "homelab-vm"
+      - k: "access"
+        v: "homelab-vm"
     teleport_auth_token: "{{ teleport_auth_token }}"
     teleport_ca_pin: "{{ teleport_ca_pin }}"
     teleport_auth_server: "{{ teleport_auth_server }}"
