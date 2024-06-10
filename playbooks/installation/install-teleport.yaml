@@ -11,4 +11,3 @@
     teleport_auth_token: "{{ teleport_auth_token }}"
     teleport_ca_pin: "{{ teleport_ca_pin }}"
     teleport_proxy_server: "teleport.facha.dev:443"
-    teleport_auth_server: null
