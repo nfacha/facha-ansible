@@ -1,7 +1,9 @@
 ---
 version: v3
 teleport:
-  auth_token: "{{ teleport_auth_token }}"
+  join_params:
+    auth_token: "{{ teleport_auth_token }}"
+    method: token
   ca_pin: "{{ teleport_ca_pin }}"
 {% if teleport_auth_server|string %}
   #auth_server: {{ teleport_auth_server }}
