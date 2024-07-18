@@ -24,6 +24,7 @@
           - curl
           - htop
           - nload
+          - parted
         update_cache: yes
     
     - name: Add Facha SSH Key to Root
